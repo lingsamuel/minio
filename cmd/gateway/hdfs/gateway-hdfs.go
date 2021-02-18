@@ -196,6 +196,7 @@ func (g *HDFS) NewGatewayLayer(creds auth.Credentials) (minio.ObjectLayer, error
 		}
 		opts.Addresses = addresses
 	}
+	logger.Info("address: %v", opts.Addresses)
 
 	u, err := user.Current()
 	if err != nil {
@@ -497,7 +498,8 @@ func (n *hdfsObjects) populateDirectoryListing(filePath string, fileInfos map[st
 	}
 
 	for _, fileInfo := range infos {
-		filePath := n.hdfsPathJoin(filePath, fileInfo.Name())
+		// Already joined prefix
+		filePath := minio.PathJoin(filePath, fileInfo.Name())
 		fileInfos[filePath] = fileInfo
 	}
 
